@@ -1,0 +1,39 @@
+#!/usr/bin/env python3
+
+""" Used to communicate with the Arduino power control panel """
+
+import serial
+
+def setup(tty, baud):
+    """ Setup the connection with the Arduino """
+    connect = lambda args: serial.Serial(args[0], args[1])
+    connected = False
+    tries = 0
+    while not connected and tries < 3:
+        try:
+            ser = connect((tty, baud))
+            connected = True
+        except serial.SerialException as _:
+            tries += 1
+    if not connected:
+        print("Unable to connect")
+        return
+
+
+    ser.setDTR(False)
+    ser.flushInput()
+    ser.setDTR(True)
+
+    main(ser)
+    close(ser)
+
+def main(ser):
+    """ Execute the main logic of the program """
+    pass
+
+def close(ser):
+    """ Close the connection with the arduino """
+    ser.close()
+
+if __name__ == "__main__":
+    setup("/dev/ttyACM0", 57600)
