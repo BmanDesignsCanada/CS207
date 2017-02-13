@@ -18,5 +18,4 @@ void loop()
     Serial.println(val_x);
     Serial.print("y");
     Serial.println(val_y);
-    delay(100);
 }

@@ -3,6 +3,7 @@
 """ Used to communicate with the Arduino power control panel """
 
 import serial
+import uinput
 
 def setup(tty, baud):
     """ Setup the connection with the Arduino """
@@ -29,8 +30,21 @@ def setup(tty, baud):
 
 def main(ser):
     """ Execute the main logic of the program """
+    events = (uinput.BTN_JOYSTICK, uinput.ABS_X + (0, 1024, 0, 0),uinput.ABS_Y + (0, 1024, 0, 0))
+    device = uinput.Device(events)
+    x = int(1024/2)
+    y = int(1024/2)
     while True:
-        print(ser.readline())
+        try:
+            data = ser.readline().decode("UTF-8")
+            axis = str(data[0])
+            value = int(data[1:])
+            if axis == 'x':
+                device.emit(uinput.ABS_X, abs(value - 1024), syn=False)
+            else:
+                device.emit(uinput.ABS_Y, value)
+        except Exception as e:
+            print(e)
 
 def close(ser):
     """ Close the connection with the arduino """
