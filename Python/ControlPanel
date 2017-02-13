@@ -29,7 +29,8 @@ def setup(tty, baud):
 
 def main(ser):
     """ Execute the main logic of the program """
-    pass
+    while True:
+        print(ser.readline())
 
 def close(ser):
     """ Close the connection with the arduino """
