@@ -3,6 +3,7 @@
 """ Used to communicate with the Arduino power control panel """
 
 import serial
+import time
 import uinput
 
 def setup(tty, baud):
@@ -25,29 +26,64 @@ def setup(tty, baud):
     ser.flushInput()
     ser.setDTR(True)
 
+    ready = False
+    while not ready:
+        data = ser.readline().decode("ascii")
+        print("|"+data+"|")
+        if data[0] == "R":
+            print("Ready")
+            ready = True
+    ser.write(b'\x01')
+
     main(ser)
     close(ser)
 
 def main(ser):
     """ Execute the main logic of the program """
-    events = (uinput.BTN_JOYSTICK, uinput.ABS_X + (0, 1024, 0, 0),uinput.ABS_Y + (0, 1024, 0, 0))
+    events = (
+             uinput.BTN_JOYSTICK,
+             uinput.ABS_X + (0, 1024, 0, 0),
+             uinput.ABS_Y + (0, 1024, 0, 0),
+             uinput.BTN_A,
+             uinput.BTN_B
+    )
     device = uinput.Device(events)
     x = int(1024/2)
     y = int(1024/2)
-    while True:
+    button = {'a' : 0, 'b' : 0, 'j' : 0}
+    run = True
+    while run:
         try:
-            data = ser.readline().decode("UTF-8")
-            axis = str(data[0])
+            data = ser.readline().decode("ascii")
+            pin = str(data[0])
             value = int(data[1:])
-            if axis == 'x':
+            if pin == 'x':
                 device.emit(uinput.ABS_X, abs(value - 1024), syn=False)
-            else:
+            elif pin == 'y':
                 device.emit(uinput.ABS_Y, value)
+            elif pin == 'j':
+                if value != button['j']:
+                    device.emit(uinput.BTN_JOYSTICK, value)
+                    button['j'] = value
+            elif pin == 'a':
+                if value != button['a']:
+                    device.emit(uinput.BTN_A, value)
+                    button['a'] = value
+            elif pin == 'b':
+                if value != button['b']:
+                    device.emit(uinput.BTN_B, value)
+                    button['b'] = value
+
+        except KeyboardInterrupt as _:
+            run = False
         except Exception as e:
+            run = False
             print(e)
 
 def close(ser):
     """ Close the connection with the arduino """
+    print("Closing")
+    ser.write(b'\x00')
     ser.close()
 
 if __name__ == "__main__":
