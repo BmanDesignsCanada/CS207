@@ -1,10 +1,11 @@
-#include "Arduino.h"
+#include <Arduino.h>
+
+#include <ShiftRegister.h>
 
 //Constants
+const int AXIS_Z = 2;
 const int AXIS_X = 1;
 const int AXIS_Y = 0;
-
-const int LED_CONNECTED = 8;
 
 const int BTN_JOYSTICK = 5;
 const int BTN_A = 3;
@@ -12,6 +13,8 @@ const int BTN_B = 4;
 
 //Globals
 bool connected = false;
+
+ShiftRegister statusLEDs(4,2,3);
 
 void setup()
 {
@@ -33,13 +36,15 @@ void loop()
         {
             case 0: //Disconnect
                 connected = false;
+                statusLEDs.write(1,false);
                 break;
             case 1: //Connect
                 connected = true;
+                statusLEDs.write(0,true);
                 break;
         }
+        statusLEDs.update();
     }
-    digitalWrite(LED_CONNECTED, (connected) ? HIGH : LOW);
     if(connected)
     {
         int val_x = analogRead(AXIS_X);
