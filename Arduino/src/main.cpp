@@ -36,7 +36,7 @@ void loop()
         {
             case 0: //Disconnect
                 connected = false;
-                statusLEDs.write(1,false);
+                statusLEDs.write(0,false);
                 break;
             case 1: //Connect
                 connected = true;
@@ -49,11 +49,14 @@ void loop()
     {
         int val_x = analogRead(AXIS_X);
         int val_y = analogRead(AXIS_Y);
+        int val_z = analogRead(AXIS_Z);
 
         Serial.print("x");
         Serial.println(val_x);
         Serial.print("y");
         Serial.println(val_y);
+        Serial.print("z");
+        Serial.println(val_z);
         Serial.print("j");
         Serial.println(abs(digitalRead(BTN_JOYSTICK) - 1));
         Serial.print("a");

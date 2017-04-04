@@ -44,12 +44,14 @@ def main(ser):
              uinput.BTN_JOYSTICK,
              uinput.ABS_X + (0, 1024, 0, 0),
              uinput.ABS_Y + (0, 1024, 0, 0),
+             uinput.ABS_Z + (0, 1024, 0, 0),
              uinput.BTN_A,
              uinput.BTN_B
     )
     device = uinput.Device(events)
     x = int(1024/2)
     y = int(1024/2)
+    z = int(1024/2)
     button = {'a' : 0, 'b' : 0, 'j' : 0}
     run = True
     while run:
@@ -61,6 +63,8 @@ def main(ser):
                 device.emit(uinput.ABS_X, abs(value - 1024), syn=False)
             elif pin == 'y':
                 device.emit(uinput.ABS_Y, value)
+            elif pin == 'z':
+                device.emit(uinput.ABS_Z, value)
             elif pin == 'j':
                 if value != button['j']:
                     device.emit(uinput.BTN_JOYSTICK, value)
