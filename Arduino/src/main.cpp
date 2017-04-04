@@ -64,4 +64,5 @@ void loop()
         Serial.print("b");
         Serial.println(abs(digitalRead(BTN_B) - 1));
     }
+    statusLEDs.tick();
 }

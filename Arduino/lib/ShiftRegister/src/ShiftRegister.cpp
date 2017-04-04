@@ -2,11 +2,6 @@
 
 ShiftRegister::ShiftRegister(int latch, int data, int clock)
 {
-  //Set pins to OUTPUT
-  pinMode(latch,  OUTPUT);
-  pinMode(data,   OUTPUT);
-  pinMode(clock,  OUTPUT);
-
   //Save variables inside object
   this->latch = latch;
   this->data  = data;
@@ -15,13 +10,42 @@ ShiftRegister::ShiftRegister(int latch, int data, int clock)
   this->value = 0;
 }
 
-ShiftRegister::write(int n, bool v)
+void ShiftRegister::setup()
+{
+    //Set pins to OUTPUT
+    pinMode(latch,  OUTPUT);
+    pinMode(data,   OUTPUT);
+    pinMode(clock,  OUTPUT);
+}
+
+void ShiftRegister::write(int n, bool v)
 {
   //Change a single bit value
   bitWrite(this->value, n, (v) ? 1 : 0);
 }
 
-ShiftRegister::update()
+void ShiftRegister::writePWM(int n, int v)
+{
+  this->pwm[n] = v;
+}
+
+void ShiftRegister::tick()
+{
+  for(int i = 0; i < 32; i++)
+  {
+    for(int l = 0; l < 16; l++){
+      if(this->pwm[l] >= i)
+      {
+        bitWrite(this->value,l,1);
+      }else{
+        bitWrite(this->value,l,0);
+      }
+    }
+    update();
+  }
+}
+
+void ShiftRegister::update()
 {
   //Set the shift register latch to low for updating
   digitalWrite(this->latch, LOW);

@@ -4,9 +4,14 @@ class ShiftRegister
 {
 public:
   ShiftRegister(int latch, int data, int clock);
-  write(int n,int v);
-  update();
+  void setup();
+  void write(int n,bool v);
+  void writePWM(int n, int v);
+  void tick();
 private:
+  void update();
+
+  int pwm[16];
   int value;
   int latch;
   int data;
