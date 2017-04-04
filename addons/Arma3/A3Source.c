@@ -30,6 +30,7 @@ void RVExtension(char *output, int outputSize, const char *function)
     {
         //Connect failed
         strncpy(output, "fail", outputSize);
+        output[outputSize-1]='\0';
         return;
     }
     strncpy(output, "OK", outputSize);
