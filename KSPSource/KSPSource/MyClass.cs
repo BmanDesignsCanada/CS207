@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
 using UnityEngine;
 
 namespace KSPSource
@@ -11,6 +14,9 @@ namespace KSPSource
 		private float logInterval = 5.0f;
 
 		private string _tag = "KSPSource ";
+
+		Socket sender;
+		byte[] bytes = new byte[1024];  
 
 		/*
          * Caution: as it says here: http://docs.unity3d.com/Documentation/ScriptReference/MonoBehaviour.Awake.html,
@@ -30,6 +36,17 @@ namespace KSPSource
 		{
 			Debug.Log(_tag+"[" + this.GetInstanceID().ToString("X")
 				+ "][" + Time.time.ToString("0.0000") + "]: Awake: " + this.name);
+			IPEndPoint remoteEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"),5000);  
+
+			// Create a TCP/IP  socket.  
+			sender = new Socket(AddressFamily.InterNetwork,   
+				SocketType.Stream, ProtocolType.Tcp );
+
+			Debug.Log(_tag+"[" + this.GetInstanceID().ToString("X")
+				+ "][" + Time.time.ToString("0.0000") + "]: Connecting to server");
+			sender.Connect(remoteEP);  
+			Debug.Log(_tag+"[" + this.GetInstanceID().ToString("X")
+				+ "][" + Time.time.ToString("0.0000") + "]: Connected");
 		}
 
 		/*
@@ -59,11 +76,24 @@ namespace KSPSource
          */
 		void FixedUpdate()
 		{
+			Vessel ActiveVessel = FlightGlobals.ActiveVessel;
+			sender.Send(Encoding.ASCII.GetBytes(ActiveVessel.altitude.ToString ()+"\n"));
 			if ((Time.time - lastFixedUpdate) > logInterval)
 			{
 				lastFixedUpdate = Time.time;
 				Debug.Log(_tag+"[" + this.GetInstanceID().ToString("X")
 					+ "][" + Time.time.ToString("0.0000") + "]: FixedUpdate");
+
+				byte[] msg = Encoding.ASCII.GetBytes("STATUS\n");  
+
+				// Send the data through the socket.  
+				sender.Send(msg);  
+
+				// Receive the response from the remote device.  
+				int bytesRec = sender.Receive(bytes);  
+				Debug.Log(_tag+"[" + this.GetInstanceID().ToString("X")
+					+ "][" + Time.time.ToString("0.0000") + "]: "+
+					Encoding.ASCII.GetString(bytes,0,bytesRec)); 
 			}
 		}
 
@@ -73,7 +103,9 @@ namespace KSPSource
 		void OnDestroy()
 		{
 			Debug.Log(_tag+"[" + this.GetInstanceID().ToString("X")
-				+ "][" + Time.time.ToString("0.0000") + "]: OnDestroy");
+			+ "][" + Time.time.ToString("0.0000") + "]: OnDestroy");
+			sender.Shutdown(SocketShutdown.Both);  
+			sender.Close();  
 		}
 	}
 }
