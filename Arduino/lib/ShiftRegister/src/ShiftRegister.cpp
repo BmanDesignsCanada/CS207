@@ -6,22 +6,25 @@ ShiftRegister::ShiftRegister(int latch, int data, int clock)
   this->latch = latch;
   this->data  = data;
   this->clock = clock;
-  //Default all lights off
-  this->value = 0;
 }
 
 void ShiftRegister::setup()
 {
-    //Set pins to OUTPUT
-    pinMode(latch,  OUTPUT);
-    pinMode(data,   OUTPUT);
-    pinMode(clock,  OUTPUT);
+  //Set pins to OUTPUT
+  pinMode(latch,  OUTPUT);
+  pinMode(data,   OUTPUT);
+  pinMode(clock,  OUTPUT);
+
+  for(int i = 0; i < 48; i++)
+  {
+    this->pwm[i] = -1;
+  }
 }
 
-void ShiftRegister::write(int n, bool v)
+void ShiftRegister::write(int n, int v)
 {
   //Change a single bit value
-  bitWrite(this->value, n, (v) ? 1 : 0);
+  value = bitWrite(value, n, v);
 }
 
 void ShiftRegister::writePWM(int n, int v)
@@ -31,17 +34,21 @@ void ShiftRegister::writePWM(int n, int v)
 
 void ShiftRegister::tick()
 {
-  for(int i = 0; i < 32; i++)
-  {
-    for(int l = 0; l < 16; l++){
-      if(this->pwm[l] >= i)
+  for(int i = 0; i < 48; i++){
+    //check if pwm has been disabled on the pin
+    if(this->pwm[i] != -1){
+      if(this->pwm[i] > l)
       {
-        bitWrite(this->value,l,1);
+        this->value = bitWrite(this->value,i,1);
       }else{
-        bitWrite(this->value,l,0);
+        this->value = bitWrite(this->value,i,0);
       }
     }
-    update();
+  }
+  update();
+  l += 1;
+  if (l==32){
+    l = 0;
   }
 }
 
