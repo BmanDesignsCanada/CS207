@@ -11,13 +11,13 @@ def Main():
     conn, addr = mySocket.accept()
     print ("Connection from: " + str(addr))
     while True:
-            data = conn.recv(1024).decode().replace("\n","")
-            if not data:
-                    break
-            print ("from connected  user: " + str(data))
+        data = conn.recv(1024).decode().replace("\n","")
+        if not data:
+                break
+        print ("from connected  user: " + str(data))
 
-            if str(data) == "STATUS":
-                conn.send(b"OK")
+        if str(data) == "STATUS":
+            conn.send(b"OK")
 
     conn.close()
 
