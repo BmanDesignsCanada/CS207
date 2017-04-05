@@ -39,7 +39,7 @@ void Input::tick()
     waitTime += millis() - prev;
     prev = millis();
   }
-  if(waitTime >= 0)
+  if(waitTime >= 25)
   {
     state = cur;
     //Serial.print((char)id);

@@ -57,6 +57,7 @@ void ShiftRegister::update()
   //Set the shift register latch to low for updating
   digitalWrite(this->latch, LOW);
   //Send data to shift register
+  shiftOut(this->data, this->clock, MSBFIRST, this->value >> 8);
   shiftOut(this->data, this->clock, MSBFIRST, this->value);
   //Display the value
   digitalWrite(this->latch, HIGH);

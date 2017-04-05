@@ -15,7 +15,7 @@ struct sockaddr_in server;
 
 char buffer[256];
 
-void RVExtension(char *output, int outputSize, const char *function)
+void __stdcall RVExtension(char *output, int outputSize, const char *function)
 {
   if (!strcmp(function, "version"))
   {
