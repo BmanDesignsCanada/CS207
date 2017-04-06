@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 
-""" Used to communicate with the Arduino power control panel """
+""" Used to communicate with the Arduino powered control panel """
 
 import serial
 import time
 import uinput
+
+bmap =  {
+            64 : uinput.BTN_JOYSTICK
+        }
 
 def setup(tty, baud):
     """ Setup the connection with the Arduino """
@@ -44,39 +48,34 @@ def main(ser):
              uinput.BTN_JOYSTICK,
              uinput.ABS_X + (0, 1024, 0, 0),
              uinput.ABS_Y + (0, 1024, 0, 0),
-             uinput.ABS_Z + (0, 1024, 0, 0),
+             uinput.ABS_Z + (0, 1024, 0, 0)""",
              uinput.BTN_A,
-             uinput.BTN_B
+             uinput.BTN_B"""
     )
     device = uinput.Device(events)
     x = int(1024/2)
     y = int(1024/2)
     z = int(1024/2)
-    button = {'a' : 0, 'b' : 0, 'j' : 0}
+    button = {}
     run = True
     while run:
         try:
             data = ser.readline().decode("ascii")
-            pin = str(data[0])
-            value = int(data[1:])
-            if pin == 'x':
-                device.emit(uinput.ABS_X, abs(value - 1024), syn=False)
-            elif pin == 'y':
-                device.emit(uinput.ABS_Y, value)
-            elif pin == 'z':
-                device.emit(uinput.ABS_Z, value)
-            elif pin == 'j':
-                if value != button['j']:
-                    device.emit(uinput.BTN_JOYSTICK, value)
-                    button['j'] = value
-            elif pin == 'a':
-                if value != button['a']:
-                    device.emit(uinput.BTN_A, value)
-                    button['a'] = value
-            elif pin == 'b':
-                if value != button['b']:
-                    device.emit(uinput.BTN_B, value)
-                    button['b'] = value
+            action = ord(data[0])
+            pin = ord(data[1])
+            value = int(data[2:])
+            if action == 97: #Analog Input
+                if pin == 'x':
+                    device.emit(uinput.ABS_X, abs(value - 1024), syn=False)
+                elif pin == 'y':
+                    device.emit(uinput.ABS_Y, value)
+                elif pin == 'z':
+                    device.emit(uinput.ABS_Z, value)
+            elif action == 98: #Button
+                if value != button[pin]:
+                    device.emit(bmap[pin], value)
+                    button[pin] = value
+                    print("Button Press:",pin)
 
         except KeyboardInterrupt as _:
             run = False

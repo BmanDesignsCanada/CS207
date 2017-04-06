@@ -42,7 +42,8 @@ void Input::tick()
   if(waitTime >= 25)
   {
     state = cur;
-    //Serial.print((char)id);
-    //Serial.println((int)cur);
+    Serial.print('b');
+    Serial.print((char)id);
+    Serial.println((int)cur);
   }
 }
