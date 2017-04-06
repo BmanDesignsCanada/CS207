@@ -14,4 +14,5 @@ private:
   int state = 0;
   Input* inputs[16];
   ShiftRegister* sr;
+  int start;
 };

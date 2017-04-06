@@ -1,0 +1,90 @@
+==== S1
+0  - S1 R
+1  - S1 G
+2  - S1 B
+3  - S2 R
+4  - S2 G
+5  - S2 B
+6  - TOGGLE ALL
+7  - TOGGLE ON
+==== S2
+8  - BL 00
+9  - BL 01
+10 - BL 10
+11 - BL 11
+12 - BL 20
+13 - BL 21
+14 - BL 30
+15 - BL 31
+==== S3
+16 - BL 40
+17 - BL 41
+18 - BL 50
+19 - BL 51
+20 - L1 R
+21 - L1 G
+22 - L1 B
+23 - L2 R
+==== S4
+24 - L2 G
+25 - L2 B
+26 - L3 R
+27 - L3 G
+28 - L3 B
+29 - L4 R
+30 - L4 G
+31 - L4 B
+==== S5
+32 - L5 R
+33 - L5 G
+34 - L5 B
+35 - L6 R
+36 - L6 G
+37 - L6 B
+38 - L7 R
+39 - L7 G
+==== S6
+40 - L7 B
+41 - L8 R
+42 - L8 G
+43 - L8 B
+44 - L9 R
+45 - L9 G
+46 - L9 B
+47 - L10 R
+==== S7
+48 - L10 G
+49 - L10 B
+50 - L11 R
+51 - L11 G
+52 - L11 B
+53 - L12 R
+54 - L12 G
+55 - L12 B
+==== S8
+56 - UNUSED
+57 - UNUSED
+58 - UNUSED
+59 - UNUSED
+60 - UNUSED
+61 - UNUSED
+62 - UNUSED
+63 - UNUSED
+==== S9
+64 - JOYSTICK
+65 - UNUSED
+66 - UNUSED
+67 - B 00
+68 - B 01
+69 - B 10
+70 - B 11
+71 - B 20
+==== S10
+72 - B 21
+73 - B 30
+74 - B 31
+75 - B 40
+76 - B 41
+77 - B 50
+78 - B 51
+79 - TOGGLE

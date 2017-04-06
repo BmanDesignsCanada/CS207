@@ -3,6 +3,7 @@
 Inputs::Inputs(int start, int pin, ShiftRegister* sr)
 {
   this->sr = sr;
+  this->start = start;
   for(int i = 0; i < 16; i++)
   {
     this->inputs[i] = new Input(start+i,0, pin, sr);
@@ -20,12 +21,12 @@ void Inputs::setup()
 
 bool Inputs::getState(int id)
 {
-  return this->inputs[id]->getState();
+  return this->inputs[id-start]->getState();
 }
 
 void Inputs::setLed(int id, bool state)
 {
-  this->inputs[id]->setLed(state);
+  this->inputs[id-start]->setLed(state);
 }
 
 void Inputs::tick()
