@@ -71,20 +71,20 @@
 62 - UNUSED
 63 - UNUSED
 ==== S9
-64 - JOYSTICK
-65 - UNUSED
-66 - UNUSED
-67 - B 00
-68 - B 01
-69 - B 10
-70 - B 11
-71 - B 20
+64 - JOYSTICK   BTN_JOYSTICK
+65 - UNUSED     BTN_BASE
+66 - UNUSED     BTN_BASE2
+67 - B 00       BTN_Z
+68 - B 01       BTN_START
+69 - B 10       BTN_X
+70 - B 11       BTN_A
+71 - B 20       BTN_Y
 ==== S10
-72 - B 21
-73 - B 30
-74 - B 31
-75 - B 40
-76 - B 41
-77 - B 50
-78 - B 51
-79 - TOGGLE
+72 - B 21       BTN_B
+73 - B 30       BTN_THUMB
+74 - B 31       BTN_DPAD_LEFT
+75 - B 40       BTN_DPAD_UP
+76 - B 41       BTN_DPAD_DOWN
+77 - B 50       BTN_THUMB2
+78 - B 51       BTN_DPAD_RIGHT
+79 - TOGGLE     BTN_C

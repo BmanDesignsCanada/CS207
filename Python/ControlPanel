@@ -7,7 +7,8 @@ import time
 import uinput
 
 bmap =  {
-            64 : uinput.BTN_JOYSTICK
+            64 : uinput.BTN_JOYSTICK,
+            77 : uinput.BTN_THUMB2
         }
 
 def setup(tty, baud):
@@ -48,9 +49,21 @@ def main(ser):
              uinput.BTN_JOYSTICK,
              uinput.ABS_X + (0, 1024, 0, 0),
              uinput.ABS_Y + (0, 1024, 0, 0),
-             uinput.ABS_Z + (0, 1024, 0, 0)""",
+             uinput.ABS_Z + (0, 1024, 0, 0),
              uinput.BTN_A,
-             uinput.BTN_B"""
+             uinput.BTN_B,
+             uinput.BTN_BASE,
+             uinput.BTN_BASE2,
+             uinput.BTN_Z,
+             uinput.BTN_X,
+             uinput.BTN_START,
+             uinput.BTN_Y,
+             uinput.BTN_THUMB,
+             uinput.BTN_THUMB2,
+             uinput.BTN_DPAD_LEFT,
+             uinput.BTN_DPAD_UP,
+             uinput.BTN_DPAD_DOWN,
+             uinput.BTN_DPAD_RIGHT
     )
     device = uinput.Device(events)
     x = int(1024/2)
@@ -60,28 +73,41 @@ def main(ser):
     run = True
     while run:
         try:
-            data = ser.readline().decode("ascii")
-            action = ord(data[0])
-            pin = ord(data[1])
-            value = int(data[2:])
-            if action == 97: #Analog Input
+            data = ser.readline().decode("ascii").replace("\n","")
+            action = str(data[0])
+            data = str(data[1:])
+            if action == 'a': #Analog Input (a)
+                pin = data[0]
+                value = int(data[1:])
                 if pin == 'x':
-                    device.emit(uinput.ABS_X, abs(value - 1024), syn=False)
+                    device.emit(uinput.ABS_X, value)
                 elif pin == 'y':
                     device.emit(uinput.ABS_Y, value)
                 elif pin == 'z':
                     device.emit(uinput.ABS_Z, value)
-            elif action == 98: #Button
+            elif action == 'b': #Button (b)
+                pin = ord(data[0])
+                value = int(data[1:])
+                if pin not in button:
+                    button[pin] = None
                 if value != button[pin]:
-                    device.emit(bmap[pin], value)
+                    try:
+                        device.emit(bmap[pin], value)
+                    except:
+                        print("No Button:",pin)
                     button[pin] = value
                     print("Button Press:",pin)
+            elif action == 'l': #Log (l)
+                print("[LOG]",data)
 
         except KeyboardInterrupt as _:
             run = False
-        except Exception as e:
-            run = False
-            print(e)
+        #except Exception as e:
+        #    print("FAILURE")
+        #    run = False
+        #    print(e)
+        #    print(action)
+        #    print(data)
 
 def close(ser):
     """ Close the connection with the arduino """
@@ -90,4 +116,4 @@ def close(ser):
     ser.close()
 
 if __name__ == "__main__":
-    setup("/dev/ttyACM0", 57600)
+    setup("/dev/ttyACM2", 57600)
