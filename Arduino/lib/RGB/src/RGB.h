@@ -1,3 +1,6 @@
+#ifndef RGB_h
+#define RGB_h
+
 #include <Arduino.h>
 #include <ShiftRegister.h>
 
@@ -14,3 +17,5 @@ private:
   int b;
   ShiftRegister* sr;
 };
+
+#endif

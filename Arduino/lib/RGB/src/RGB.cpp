@@ -29,8 +29,8 @@ void RGB::set(char color)
   switch(color)
   {
     case 'y': //Yellow
-      this->sr->writePWM(this->r,31);
-      this->sr->writePWM(this->g,31);
+      this->sr->writePWM(this->r,16);
+      this->sr->writePWM(this->g,0);
       this->sr->writePWM(this->b,31);
       break;
     case 'b': //Blue

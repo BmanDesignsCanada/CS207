@@ -73,7 +73,12 @@ def main(ser):
     run = True
     while run:
         try:
-            data = ser.readline().decode("ascii").replace("\n","")
+            recv = ser.readline()
+            try:
+                data = recv.decode("ascii").replace("\n","")
+            except:
+                print("Error:",recv)
+                pass
             action = str(data[0])
             data = str(data[1:])
             if action == 'a': #Analog Input (a)
@@ -116,4 +121,4 @@ def close(ser):
     ser.close()
 
 if __name__ == "__main__":
-    setup("/dev/ttyACM2", 57600)
+    setup("/dev/ttyACM3", 57600)
