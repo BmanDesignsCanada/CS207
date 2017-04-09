@@ -8,7 +8,19 @@ import uinput
 
 bmap =  {
             64 : uinput.BTN_JOYSTICK,
-            77 : uinput.BTN_THUMB2
+            67 : uinput.BTN_Z,
+            68 : uinput.BTN_START,
+            69 : uinput.BTN_X,
+            70 : uinput.BTN_A,
+            71 : uinput.BTN_Y,
+            72 : uinput.BTN_B,
+            73 : uinput.BTN_THUMB,
+            74 : uinput.BTN_DPAD_LEFT,
+            75 : uinput.BTN_DPAD_UP,
+            76 : uinput.BTN_DPAD_DOWN,
+            77 : uinput.BTN_THUMB2,
+            78 : uinput.BTN_DPAD_RIGHT,
+            79 : uinput.BTN_C
         }
 
 def setup(tty, baud):
@@ -101,7 +113,6 @@ def main(ser):
                     except:
                         print("No Button:",pin)
                     button[pin] = value
-                    print("Button Press:",pin)
             elif action == 'l': #Log (l)
                 print("[LOG]",data)
 
@@ -121,4 +132,4 @@ def close(ser):
     ser.close()
 
 if __name__ == "__main__":
-    setup("/dev/ttyACM3", 57600)
+    setup("/dev/ttyACM0", 57600)
