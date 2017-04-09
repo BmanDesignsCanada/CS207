@@ -21,7 +21,7 @@ private:
   RGB* led;
   ShiftRegister* sr;
 
-  unsigned long prev = 0;
+  unsigned int prev = 0;
   unsigned int count = 0;
 
   int action = 0;

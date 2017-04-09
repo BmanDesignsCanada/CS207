@@ -52,7 +52,7 @@ void ShiftRegister::writePWM(int n, int v)
 
 void ShiftRegister::tick()
 {
-  for(int i = 0; i < 19; i++){
+  for(int i = 0; i < 55; i++){
     //check if pwm has been disabled on the pin
     if(this->pwm[i] != -1){
       if(this->pwm[i] > l)

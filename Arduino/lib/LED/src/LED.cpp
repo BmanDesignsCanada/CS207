@@ -41,9 +41,11 @@ void LED::tick()
   {
     case 0:
       this->sr->write(this->pin,0);
+      this->sr->writePWM(this->pin,-1);
       break;
     case 1:
       this->sr->write(this->pin,1);
+      this->sr->writePWM(this->pin,-1);
       break;
     case 2: //Fade
       this->count += (millis() - this->prev);
