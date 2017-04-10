@@ -74,11 +74,11 @@ void loop()
   }
   if(connected)
   {
-
-    //Check which way to install josytick next time
+    //analogRead is really slow
     led.tick();
     Serial.print("ax");
     led.tick();
+    //Check which way to install josytick next time
     Serial.println(map(analogRead(0),0,1024,1024,0));
     led.tick();
     Serial.print("ay");
@@ -104,7 +104,7 @@ void loop()
       b11.fade(1000);
       b12.fade(100);
       break;
-    case 2:
+    case 2: //loop around
       allOff();
       switch(stage)
       {
