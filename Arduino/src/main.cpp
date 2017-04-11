@@ -56,7 +56,7 @@ void setup()
   status1.set('r');
 }
 
-void loop()
+void receiveCommands()
 {
   if(Serial.available() > 0)
   {
@@ -72,19 +72,29 @@ void loop()
         break;
     }
   }
+}
+
+void sendJoystick()
+{
+  led.tick();
+  Serial.print("ax");
+  led.tick();
+  //Check which way to install josytick next time
+  Serial.println(map(analogRead(0),0,1024,1024,0));
+  led.tick();
+  Serial.print("ay");
+  led.tick();
+  Serial.println(map(analogRead(1),0,1024,1024,0));
+  led.tick();
+}
+
+void loop()
+{
+  receiveCommands();
   if(connected)
   {
     //analogRead is really slow
-    led.tick();
-    Serial.print("ax");
-    led.tick();
-    //Check which way to install josytick next time
-    Serial.println(map(analogRead(0),0,1024,1024,0));
-    led.tick();
-    Serial.print("ay");
-    led.tick();
-    Serial.println(map(analogRead(1),0,1024,1024,0));
-    led.tick();
+    sendJoystick();
     //Serial.print("az");
     //Serial.println(map(analogRead(2),0,1024,1024,0));
   }
