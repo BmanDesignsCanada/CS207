@@ -59,9 +59,9 @@ def main(ser):
     """ Execute the main logic of the program """
     events = (
              uinput.BTN_JOYSTICK,
-             uinput.ABS_X + (0, 1024, 0, 0),
-             uinput.ABS_Y + (0, 1024, 0, 0),
-             uinput.ABS_Z + (0, 1024, 0, 0),
+             uinput.ABS_HAT0X + (0, 1024, 0, 0),
+             uinput.ABS_HAT0Y + (0, 1024, 0, 0),
+             uinput.ABS_RUDDER + (0, 1024, 0, 0),
              uinput.BTN_A,
              uinput.BTN_B,
              uinput.BTN_BASE,
@@ -97,11 +97,11 @@ def main(ser):
                 pin = data[0]
                 value = int(data[1:])
                 if pin == 'x':
-                    device.emit(uinput.ABS_X, value)
+                    device.emit(uinput.ABS_HAT0X, value)
                 elif pin == 'y':
-                    device.emit(uinput.ABS_Y, value)
+                    device.emit(uinput.ABS_HAT0Y, value)
                 elif pin == 'z':
-                    device.emit(uinput.ABS_Z, value)
+                    device.emit(uinput.ABS_RUDDER, value)
             elif action == 'b': #Button (b)
                 pin = ord(data[0])
                 value = int(data[1:])
