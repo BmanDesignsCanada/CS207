@@ -25,7 +25,7 @@ void LED::fade(int freq)
   this->action = 2;
 }
 
-void LED::flast(int freq)
+void LED::flash(int freq)
 {
   this->freq = freq / 2;
   this->action = 3;

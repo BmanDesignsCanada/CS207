@@ -90,7 +90,7 @@ The construction of the enclosure was designed both for a wood based constructio
 \newpage
 \subsubsection{Input}
 \begin{wrapfigure}{l}{0.3\textwidth}
-	\vspace*{-0.5cm}
+	\vspace*{0cm}
 	\centering
 	\includegraphics[width=0.3\textwidth]{button}
 	\caption{LED Source}
@@ -144,6 +144,12 @@ The bottom, front, and back of the panel are built from \(\frac{3}{4}\)  inch wo
 \newpage
 \subsection{Hardware}
 \subsubsection{Shift Registers}
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=0.8\textwidth]{daisy_chain}
+	\caption{Shift Register Daisy Chain}
+	\label{fig:daisy_chain}
+\end{figure}
 \paragraph{}
 \begin{wrapfigure}[10]{r}{0.35\textwidth}
 	\vspace*{-0.5cm}
@@ -153,6 +159,7 @@ The bottom, front, and back of the panel are built from \(\frac{3}{4}\)  inch wo
 	\label{fig:circuit}
 \end{wrapfigure}
 The most important component of the electrical circuit in the panel is the ten 8-bit shift registers. The registers are daisy chained together, essentially creating one 80-bit register. This is what allows this project to have so many digital inputs and outputs (fifty-six outputs \& fourteen inputs) even though the Arduino Uno used only has fourteen digital pins. There are ten unused pins on the shift registers allowing for future expansion. The panel only requires three outputs (data, clock, latch) and one input (buttons).
+
 \subsubsection{Buttons}
 \paragraph{}
 The panel features twelve buttons and a toggle switch but only uses one digital input on the Arduino. This is accomplished by connecting the reference voltage of the buttons to the shift register instead of to a five volt source. Only one button is provided with a reference voltage at any given time; if the reference voltage is detected by the Arduino then the Arduino knows that button is pressed.
@@ -162,8 +169,29 @@ The panel features twelve buttons and a toggle switch but only uses one digital 
 The Arduino software is programmed with C++ and uses the \gls{GCC} compiler as part of the Platformio ecosystem. Some non-standard C++ code is used and the \gls{GCC} or similar compiler is required. No makefile is provided and compiling with Platformio's tools is the best method.
 \paragraph{}
 The Arduino code is heavily dependent on the many state machines that have been created for each component type. These state machines allow all components to work independently of each other. The state machines tick in an order that allows the input to be recorded and sent to the computer without noticeable delay; the \glspl{LED} can flash fast enough that no flickering is visible.
+\begin{figure}[h!]
+	\caption{Example Loop Function}
+	\lstset{escapechar=@,style=customc}
+	\begin{lstlisting}
+void loop()
+{
+  receiveCommands();
+  if (connected)
+  {
+    sendJoystick();
+    led.tick();
+    in.tick();
+    led.tick();
+  }
+}
+	\end{lstlisting}
+	\label{fig:fnc_loop}
+\end{figure}
 
-\begin{figure}[!h]
+\subsubsection{Linux}
+\paragraph{}
+The control software for Linux is written in Python. Python was chosen as it allows quick development and testing as well as having a well documented Serial library. uinput, a kernel module for Linux, is used to emulate a joystick. python-uinput, a Pythonic library, is used to interface with the kernel module. The Python program receives joystick positions and button presses from the Arduino and then emulates those same actions on the computer.
+\begin{figure}[h]
 	\centering
 	\begin{tikzpicture}[node distance=1cm, auto,]
 		\node[punkt] (arduino) {Arduino};
@@ -179,10 +207,6 @@ The Arduino code is heavily dependent on the many state machines that have been 
 	\label{fig:diagram}
 	\caption{Flow Diagram}
 \end{figure}
-
-\subsubsection{Linux}
-\paragraph{}
-The control software for Linux is written in Python. Python was chosen as it allows quick development and testing as well as having a well documented Serial library. uinput, a kernel module for Linux, is used to emulate a joystick. python-uinput, a Pythonic library, is used to interface with the kernel module. The Python program receives joystick positions and button presses from the Arduino and then emulates those same actions on the computer.
 \subsubsection{Windows}
 \paragraph{}
 The control software for Windows is not functional at the time of this report. The software is being created using C++ and the vJoy device driver. vJoy is used to simulate a joystick when one is not available but the software being used requires one. The control software will use vJoy to turn the information from the Arduino into a simulated joystick.
@@ -205,24 +229,6 @@ After deciding to use the same shift register from the course's labs (74HC595) I
 A Major milestone for this project overcoming the limitations of the Arduino Uno. I was able to get all eighty inputs and outputs working through the ten shift registers. The speed of the \texttt{shiftOut} function was too slow and the \glspl{LED} were visibly flickering. Creating a faster way to output data to the shift registers was a huge accomplishment.
 \paragraph{}
 I am very happy with how the structure for the code turned out. Everything is abstracted to libraries allowing for a clean and clear sense of flow in the main logic of the program (fig.~\ref{fig:fnc_loop}). The way the game modifications have been designed allows for more to be created in the future with very little worry of limitations in the Arduino code or control software.
-\begin{figure}[!h]
-	\caption{Example Loop Function}
-	\lstset{escapechar=@,style=customc}
-	\begin{lstlisting}
-void loop()
-{
-  receiveCommands();
-  if (connected)
-  {
-    sendJoystick();
-    led.tick();
-    in.tick();
-    led.tick();
-  }
-}
-	\end{lstlisting}
-	\label{fig:fnc_loop}
-\end{figure}
 \section{Conclusion}
 \paragraph{}
 This project has resulted in a gameplay experience that is more satisfying and versatile than a standard gamepad and meets the goals it originally set out to accomplish. The project is not hard to expand, the shift registers have ten unused pins and the code is fast and efficient, so more shift registers could be added in the future. The control software is simple and can interact with sources written in virtually any language.
