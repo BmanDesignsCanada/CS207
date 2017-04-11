@@ -1,3 +1,4 @@
 0   Off
 1   On
 2   Fade
+3   Flash

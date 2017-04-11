@@ -1,6 +1,11 @@
 #include <Arduino.h>
 #include <ShiftRegister.h>
 
+/*
+  Library to manage individual Inputs
+  uses a debounce timer
+*/
+
 class Input
 {
 public:

@@ -2,6 +2,11 @@
 #include <Input.h>
 #include <ShiftRegister.h>
 
+/*
+  Library used to manage multiple Inputs
+  only checks one button every tick
+*/
+
 class Inputs
 {
 public:

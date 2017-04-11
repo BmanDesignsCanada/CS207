@@ -1,20 +1,13 @@
 #include "ShiftRegister.h"
 
-static inline void latchPinH()  {bitSet(PORTB,0);}
-static inline void latchPinL()  {bitClear(PORTB,0);}
-static inline void clockPinH()  {bitSet(PORTB,4);}
-static inline void clockPinL()  {bitClear(PORTB,4);}
-static inline void dataPinH()   {bitSet(PORTB,2);}
-static inline void dataPinL()   {bitClear(PORTB,2);}
-
 void fastShiftOut(unsigned int b){
-  clockPinL();
-  dataPinL();
+  bitClear(PORTB,4);                        //Clock Low
+  bitClear(PORTB,2);                        //Data Low
   for (int i=7; i>=0; i--){
-    if (bitRead(b,i) == 1) dataPinH();
-    else dataPinL();
-    clockPinH();
-    clockPinL();
+    if (bitRead(b,i) == 1) bitSet(PORTB,2); //Data High
+    else bitClear(PORTB,2);                 //Data Low
+    bitSet(PORTB,4);                        //Clock High
+    bitClear(PORTB,4);                      //Clock Low
   }
 }
 
@@ -47,6 +40,7 @@ void ShiftRegister::write(int n, int v)
 
 void ShiftRegister::writePWM(int n, int v)
 {
+  //Change the PWM value
   this->pwm[n] = v;
 }
 
@@ -55,7 +49,8 @@ void ShiftRegister::tick()
   for(int i = 0; i < 55; i++){
     //check if pwm has been disabled on the pin
     if(this->pwm[i] != -1){
-      if(this->pwm[i] > l)
+      //if PWM value is greater than iteration
+      if(this->pwm[i] != 0 && this->pwm[i] >= l)
       {
         set(i,1);
       }else{
@@ -64,6 +59,7 @@ void ShiftRegister::tick()
     }
   }
   update();
+  //Only runs one of the 32 steps every tick
   l += 1;
   if (l==32){
     l = 0;
@@ -91,6 +87,7 @@ void ShiftRegister::update()
 
 void ShiftRegister::set(int pin, int v)
 {
+  //Change the bit in the appropriate variable
   if (pin < 16)
     this->value = bitWrite(this->value,pin,v);
   else if (pin < 32)

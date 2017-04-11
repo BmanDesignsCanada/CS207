@@ -3,6 +3,11 @@
 
 #include <Arduino.h>
 
+/*
+  Library to manage the sending of data to shift registers
+  aswell as creating the PWM effect
+*/
+
 class ShiftRegister
 {
 public:

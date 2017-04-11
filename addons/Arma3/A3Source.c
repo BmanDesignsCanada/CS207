@@ -4,9 +4,9 @@
  *   gcc -shared -fPIC -o A3Source.so A3Source.c
  */
 
-#include <string.h>     // strcmp, strncpy
-#include <sys/socket.h>  //socket
-#include <arpa/inet.h>   //inet_addr
+#include <string.h>       // strcmp, strncpy
+#include <sys/socket.h>   //socket
+#include <arpa/inet.h>    //inet_addr
 
 static char version[] = "0.1";
 

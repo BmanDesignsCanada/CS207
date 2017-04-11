@@ -2,6 +2,10 @@
 #include <RGB.h>
 #include <ShiftRegister.h>
 
+/*
+  Library to support individual LEDs
+*/
+
 class LED
 {
 public:
@@ -10,6 +14,7 @@ public:
   //LED(RGB* led, ShiftRegister* sr);
 
   void fade(int freq);
+  void flash(int freq);
   void on();
   void off();
 

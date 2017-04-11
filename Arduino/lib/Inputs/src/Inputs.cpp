@@ -6,6 +6,7 @@ Inputs::Inputs(int start, int pin, ShiftRegister* sr)
   this->start = start;
   for(int i = 0; i < 16; i++)
   {
+    //Initilize 16 inputs
     this->inputs[i] = new Input(start+i,0, pin, sr);
   }
   pinMode(pin,INPUT);
@@ -31,6 +32,7 @@ void Inputs::setLed(int id, bool state)
 
 void Inputs::tick()
 {
+  //Check one button every tick();
   this->inputs[state]->tick();
   state++;
   if(state == 16)

@@ -33,6 +33,7 @@ bool last = false;
 
 void allOff()
 {
+  //Turn all the LEDs off
   b2.off();
   b3.off();
   b4.off();
@@ -52,7 +53,7 @@ void setup()
   led.setup();
   in.setup();
   Serial.println("R");
-
+  //set the status led to red
   status1.set('r');
 }
 
@@ -64,10 +65,12 @@ void receiveCommands()
     {
       case 0: //Disconnect
         connected = false;
+        //set the status led to red
         status1.set('r');
         break;
       case 1: //Connect
         connected = true;
+        //set the status led to yellow
         status1.set('y');
         break;
     }
@@ -76,15 +79,16 @@ void receiveCommands()
 
 void sendJoystick()
 {
-  led.tick();
+  //Read joystick positions and invert the data
+  led.tick(); //analogRead is really slow
   Serial.print("ax");
-  led.tick();
-  //Check which way to install josytick next time
-  Serial.println(map(analogRead(0),0,1024,1024,0));
+  Serial.println(map(analogRead(0),0,1024,1024,0)); //Check which way to install josytick next time
   led.tick();
   Serial.print("ay");
-  led.tick();
   Serial.println(map(analogRead(1),0,1024,1024,0));
+  led.tick();
+  Serial.print("az");
+  Serial.println(map(analogRead(2),0,1024,1024,0));
   led.tick();
 }
 
@@ -93,12 +97,11 @@ void loop()
   receiveCommands();
   if(connected)
   {
-    //analogRead is really slow
     sendJoystick();
-    //Serial.print("az");
-    //Serial.println(map(analogRead(2),0,1024,1024,0));
   }
   in.tick();
+
+  //LED Demonstation
   switch(demo)
   {
     case 1: //fade
@@ -151,6 +154,7 @@ void loop()
       break;
   }
 
+  //if button #69 is pushed change Demonstation
   if(in.getState(69) && !last)
   {
     demo++;

@@ -4,6 +4,10 @@
 #include <Arduino.h>
 #include <ShiftRegister.h>
 
+/*
+  Helper to set RGB LED colors
+*/
+
 class RGB
 {
 public:
